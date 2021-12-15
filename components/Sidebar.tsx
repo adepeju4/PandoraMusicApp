@@ -53,7 +53,7 @@ const musicMenu = [
 
 function Sidebar() {
   const { playlists } = usePlaylist();
-console.log(playlists)
+
   return (
     <Box
       width="100%"

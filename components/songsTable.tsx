@@ -1,34 +1,34 @@
-import {
-  Box,
-  Table,
-  Thead,
-  Tr,
-  Th,
-  Td,
-  Tbody,
-  IconButton,
-} from "@chakra-ui/react";
-
+import { Box } from "@chakra-ui/layout";
+import { Table, Thead, Td, Tr, Tbody, Th, IconButton } from "@chakra-ui/react";
 import { BsFillPlayFill } from "react-icons/bs";
-
 import { AiOutlineClockCircle } from "react-icons/ai";
+import { useStoreActions } from "easy-peasy";
 import { formatDate, formatTime } from "../lib/formatters";
 
-const SongsTable = ({ songs }) => {
-  console.log(songs);
+const SongTable = ({ songs }) => {
+  const playSongs = useStoreActions((store: any) => store.changeActiveSongs);
+  const setActiveSong = useStoreActions((store: any) => store.changeActiveSong);
+
+  const handlePlay = (activeSong?) => {
+    setActiveSong(activeSong || songs[0]);
+    playSongs(songs);
+  };
+
   return (
-    <Box bg="transparent">
+    <Box bg="transparent" color="white">
       <Box padding="10px" marginBottom="20px">
-        <IconButton
-          icon={<BsFillPlayFill />}
-          aria-label="play"
-          colorScheme="green"
-          size="lg"
-          isRound
-          marginBottom="30px"
-        />
-        <Table variant="unstyled" color="#fff">
-          <Thead borderBottom="1px solid" borderColor="rgba(255,255,255,.2)">
+        <Box marginBottom="30px">
+          <IconButton
+            icon={<BsFillPlayFill fontSize="30px" />}
+            aria-label="play"
+            colorScheme="green"
+            size="lg"
+            isRound
+            onClick={() => handlePlay()}
+          />
+        </Box>
+        <Table variant="unstyled">
+          <Thead borderBottom="1px solid" borderColor="rgba(255,255,255,0.2)">
             <Tr>
               <Th>#</Th>
               <Th>Title</Th>
@@ -49,6 +49,7 @@ const SongsTable = ({ songs }) => {
                 }}
                 key={song.id}
                 cursor="pointer"
+                onClick={() => handlePlay(song)}
               >
                 <Td>{i + 1}</Td>
                 <Td>{song.name}</Td>
@@ -63,4 +64,4 @@ const SongsTable = ({ songs }) => {
   );
 };
 
-export default SongsTable;
+export default SongTable;
