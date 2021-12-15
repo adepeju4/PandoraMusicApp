@@ -1,4 +1,4 @@
-import { Box, Flex, Input, Button } from "@chakra-ui/react";
+import { Box, Flex, Input, Button, Text } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { FC, useState } from "react";
 import { useSWRConfig } from "swr";
@@ -6,8 +6,11 @@ import NextImage from "next/image";
 import { auth } from "../lib/mutations";
 
 const AuthForm: FC<{ mode: "signin" | "signup" }> = ({ mode }) => {
+  const [firstName, setfirstName] = useState("");
+  const [lastName, setlastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, seterror] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
@@ -15,11 +18,12 @@ const AuthForm: FC<{ mode: "signin" | "signup" }> = ({ mode }) => {
     e.preventDefault();
     setIsLoading(true);
 
-    const Auth = await auth(mode, { email, password });
-    if (!Auth) {
-      setIsLoading(false);
-    }
-    router.push("/");
+    const Auth = await auth(mode, { firstName, lastName, email, password });
+
+    setIsLoading(false);
+
+    if (Auth.error) seterror(Auth.error);
+    else router.push("/");
   };
 
   return (
@@ -35,6 +39,17 @@ const AuthForm: FC<{ mode: "signin" | "signup" }> = ({ mode }) => {
       <Flex justify="center" align="center" height="calc(100vh - 100px)">
         <Box padding="50px" bg="gray.900" borderRadius="6px">
           <form onSubmit={handleSubmit}>
+            {error && <Text color="red.600"> {error}</Text>}
+            <Input
+              placeholder="firstName"
+              type="text"
+              onChange={(e) => setfirstName(e.target.value)}
+            />
+            <Input
+              placeholder="lastName"
+              type="text"
+              onChange={(e) => setlastName(e.target.value)}
+            />
             <Input
               placeholder="email"
               type="email"
