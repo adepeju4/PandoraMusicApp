@@ -17,10 +17,13 @@ const AuthForm: FC<{ mode: "signin" | "signup" }> = ({ mode }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
+    seterror("");
 
     const Auth = await auth(mode, { firstName, lastName, email, password });
 
     setIsLoading(false);
+
+    console.log(Auth);
 
     if (Auth.error) seterror(Auth.error);
     else router.push("/");
@@ -37,28 +40,38 @@ const AuthForm: FC<{ mode: "signin" | "signup" }> = ({ mode }) => {
         <NextImage src="/logo.svg" height={60} width={120} />
       </Flex>
       <Flex justify="center" align="center" height="calc(100vh - 100px)">
-        <Box padding="50px" bg="gray.900" borderRadius="6px">
+        <Box padding="50px" bg="gray.900" borderRadius="6px" maxWidth={"50%"}>
           <form onSubmit={handleSubmit}>
             {error && <Text color="red.600"> {error}</Text>}
-            <Input
-              placeholder="firstName"
-              type="text"
-              onChange={(e) => setfirstName(e.target.value)}
-            />
-            <Input
-              placeholder="lastName"
-              type="text"
-              onChange={(e) => setlastName(e.target.value)}
-            />
+
+            {mode === "signup" && (
+              <>
+                <Input
+                  placeholder="firstName"
+                  type="text"
+                  onChange={(e) => setfirstName(e.target.value)}
+                  marginBottom={"15px"}
+                />
+                <Input
+                  placeholder="lastName"
+                  type="text"
+                  onChange={(e) => setlastName(e.target.value)}
+                  marginBottom={"15px"}
+                />
+              </>
+            )}
+
             <Input
               placeholder="email"
               type="email"
               onChange={(e) => setEmail(e.target.value)}
+              marginBottom={"15px"}
             />
             <Input
               placeholder="password"
               type="password"
               onChange={(e) => setPassword(e.target.value)}
+              marginBottom={"15px"}
             />
             <Button
               type="submit"

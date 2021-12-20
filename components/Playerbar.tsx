@@ -1,10 +1,16 @@
 import { Box, Flex, Text } from "@chakra-ui/layout";
 import { useStoreState } from "easy-peasy";
 import Player from "./Playr";
+import VolumeControl from "./VolumeControl";
+import { useRef, useState } from "react";
 
 const PlayerBar = () => {
   const songs = useStoreState((state: any) => state.activeSongs);
   const activeSong = useStoreState((state: any) => state.activeSong);
+  const random = useStoreState((state: any) => state.random);
+  const soundRef = useRef(null);
+  const [mute, setmute] = useState(false);
+
   return (
     <Box height="100px" width="100vw" bg="gray.900" padding="10px">
       <Flex align="center">
@@ -15,7 +21,20 @@ const PlayerBar = () => {
           </Box>
         ) : null}
         <Box width="40%">
-          {activeSong ? <Player songs={songs} activeSong={activeSong} /> : null}
+          {activeSong ? (
+            <Player
+              songs={songs}
+              activeSong={activeSong}
+              random={random}
+              soundRef={soundRef}
+              mute={mute}
+            />
+          ) : null}
+        </Box>
+        <Box width="30%" color="white" padding="20px">
+          {activeSong ? (
+            <VolumeControl soundRef={soundRef} mute={mute} setmute={setmute} />
+          ) : null}
         </Box>
       </Flex>
     </Box>

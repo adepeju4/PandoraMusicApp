@@ -22,8 +22,11 @@ import {
 } from "react-icons/md";
 import { useStoreActions } from "easy-peasy";
 import { formatTime } from "../lib/formatters";
+import { randomize } from "../utils/randomize";
+import shuffleTracker from "../lib/shuffleTracker";
 
-const Player = ({ songs, activeSong }) => {
+const Player = ({ songs, activeSong, random, soundRef, mute }) => {
+  console.log(mute);
   const [playing, setPlaying] = useState(true);
   const [index, setIndex] = useState(
     songs.findIndex((s) => s.id === activeSong.id)
@@ -33,9 +36,15 @@ const Player = ({ songs, activeSong }) => {
   const [repeat, setRepeat] = useState(false);
   const [shuffle, setShuffle] = useState(false);
   const [duration, setDuration] = useState(0.0);
-  const soundRef = useRef(null);
+  const [tracker, setTracker] = useState(0);
   const repeatRef = useRef(repeat);
   const setActiveSong = useStoreActions((state: any) => state.changeActiveSong);
+  const setRandom = useStoreActions((state: any) => state.changerandom);
+
+  useEffect(() => {
+    const shuffled = randomize(songs, "songs");
+    setRandom(shuffled);
+  }, [shuffle]);
 
   useEffect(() => {
     let timerId;
@@ -49,7 +58,6 @@ const Player = ({ songs, activeSong }) => {
       timerId = requestAnimationFrame(f);
       return () => cancelAnimationFrame(timerId);
     }
-
     cancelAnimationFrame(timerId);
   }, [playing, isSeeking]);
 
@@ -60,6 +68,19 @@ const Player = ({ songs, activeSong }) => {
   useEffect(() => {
     repeatRef.current = repeat;
   }, [repeat]);
+
+  useEffect(() => {
+    if (shuffle) {
+      let track = shuffleTracker(random, tracker);
+      if (track) {
+        setActiveSong(track);
+        setTracker((state) => state + 1);
+      } else {
+        setTracker(0);
+        setPlaying(false);
+      }
+    }
+  }, [shuffle, index]);
 
   const setPlayState = (value) => {
     setPlaying(value);
@@ -122,6 +143,7 @@ const Player = ({ songs, activeSong }) => {
           ref={soundRef}
           onLoad={onLoad}
           onEnd={onEnd}
+          mute={mute}
         />
       </Box>
       <Center color="gray.600">
@@ -196,7 +218,7 @@ const Player = ({ songs, activeSong }) => {
               step={0.1}
               min={0}
               id="player-range"
-              max={duration ? duration.toFixed(2) : 0}
+              max={duration ? Number(duration.toFixed(2)) : 0}
               onChange={onSeek}
               value={[seek]}
               onChangeStart={() => setIsSeeking(true)}

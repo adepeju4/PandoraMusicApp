@@ -7,17 +7,20 @@ import { NextApiRequest, NextApiResponse } from "next";
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const salt = bcrypt.genSaltSync();
 
-  const { email, password } = req.body;
+  const { firstName, lastName, email, password } = req.body;
 
   let user;
   try {
     user = await prisma.user.create({
       data: {
+        firstName,
+        lastName,
         email,
         password: bcrypt.hashSync(password, salt),
       },
     });
   } catch (error) {
+    console.log(error);
     res.status(401).json({ error: "User already exists" });
     return;
   }
