@@ -1,7 +1,6 @@
 import { Box, Flex, Input, Button, Text } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { FC, useState } from "react";
-import { useSWRConfig } from "swr";
 import NextImage from "next/image";
 import { auth } from "../lib/mutations";
 
@@ -22,8 +21,6 @@ const AuthForm: FC<{ mode: "signin" | "signup" }> = ({ mode }) => {
     const Auth = await auth(mode, { firstName, lastName, email, password });
 
     setIsLoading(false);
-
-    console.log(Auth);
 
     if (Auth.error) seterror(Auth.error);
     else router.push("/");

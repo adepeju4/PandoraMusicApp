@@ -22,12 +22,12 @@ import {
 } from "react-icons/md";
 import { useStoreActions } from "easy-peasy";
 import { formatTime } from "../lib/formatters";
-import { randomize } from "../utils/randomize";
+import { randomize } from "../lib/randomize";
 import shuffleTracker from "../lib/shuffleTracker";
 
 const Player = ({ songs, activeSong, random, soundRef, mute }) => {
-  console.log(mute);
   const [playing, setPlaying] = useState(true);
+
   const [index, setIndex] = useState(
     songs.findIndex((s) => s.id === activeSong.id)
   );

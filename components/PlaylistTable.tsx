@@ -1,30 +1,27 @@
 import { Box } from "@chakra-ui/layout";
 import { Table, Thead, Td, Tr, Tbody, Th, IconButton } from "@chakra-ui/react";
-import { BsFillPlayFill } from "react-icons/bs";
-import { AiOutlineClockCircle } from "react-icons/ai";
-import { useStoreActions } from "easy-peasy";
-import { formatDate, formatTime } from "../lib/formatters";
+import { useEffect } from "react";
+import {
+  AiOutlineClockCircle,
+  AiOutlinePlus,
+  AiOutlineMinusCircle,
+} from "react-icons/ai";
+import { formatTime, formatDate } from "../lib/formatters";
 
-const SongTable = ({ songs }) => {
-  const playSongs = useStoreActions((store: any) => store.changeActiveSongs);
-  const setActiveSong = useStoreActions((store: any) => store.changeActiveSong);
-  const handlePlay = (activeSong?) => {
-    setActiveSong(activeSong || songs[0]);
-    playSongs(songs);
-  };
-
+const PlaylistTable = ({ submit, removeTrack, songs }) => {
   return (
     <Box bg="transparent" color="white">
       <Box padding="10px" marginBottom="20px">
-        <Box marginBottom="30px">
+        <Box marginBottom="30px" display={"flex"} alignItems="center">
           <IconButton
-            icon={<BsFillPlayFill fontSize="30px" />}
-            aria-label="play"
+            icon={<AiOutlinePlus fontSize="30px" />}
+            aria-label="create-playlist"
             colorScheme="green"
             size="lg"
             isRound
-            onClick={() => handlePlay()}
+            onClick={submit}
           />
+          <Box marginLeft={"20px"}>Create Playlist</Box>
         </Box>
         <Table variant="unstyled">
           <Thead borderBottom="1px solid" borderColor="rgba(255,255,255,0.2)">
@@ -35,6 +32,7 @@ const SongTable = ({ songs }) => {
               <Th>
                 <AiOutlineClockCircle />
               </Th>
+              <Th>Remove</Th>
             </Tr>
           </Thead>
           <Tbody>
@@ -48,12 +46,24 @@ const SongTable = ({ songs }) => {
                 }}
                 key={song.id}
                 cursor="pointer"
-                onClick={() => handlePlay(song)}
               >
                 <Td>{i + 1}</Td>
                 <Td>{song.name}</Td>
                 <Td>{formatDate(song.createdAt)}</Td>
                 <Td>{formatTime(song.duration)}</Td>
+                <Td>
+                  {" "}
+                  <IconButton
+                    icon={<AiOutlineMinusCircle fontSize="10px" />}
+                    aria-label="remove"
+                    colorScheme="red"
+                    size="xs"
+                    isRound
+                    onClick={() => {
+                      removeTrack(i);
+                    }}
+                  />
+                </Td>
               </Tr>
             ))}
           </Tbody>
@@ -63,4 +73,4 @@ const SongTable = ({ songs }) => {
   );
 };
 
-export default SongTable;
+export default PlaylistTable;

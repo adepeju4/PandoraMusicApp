@@ -1,6 +1,6 @@
 import { Input } from "@chakra-ui/react";
 
-function Searchbar({ setSearchItem }) {
+function Searchbar({ searchTerm, onSaveSearchTerm }) {
   return (
     <Input
       placeholder="search"
@@ -10,6 +10,8 @@ function Searchbar({ setSearchItem }) {
       borderRadius={"10px"}
       outline={"none"}
       border={"1px solid #fff"}
+      value={searchTerm}
+      onChange={onSaveSearchTerm}
     />
   );
 }

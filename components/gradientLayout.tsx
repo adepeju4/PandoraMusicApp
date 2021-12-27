@@ -24,6 +24,7 @@ function GradientLayout({
             boxShadow="2xl"
             src={image}
             borderRadius={roundImage ? "100%" : "3px"}
+            objectFit={"cover"}
           />
         </Box>
         <Box padding="20px" lineHeight="40px" color="white">
