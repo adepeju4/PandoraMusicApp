@@ -1,6 +1,5 @@
 import { Box } from "@chakra-ui/layout";
 import { Table, Thead, Td, Tr, Tbody, Th, IconButton } from "@chakra-ui/react";
-import { useEffect } from "react";
 import {
   AiOutlineClockCircle,
   AiOutlinePlus,

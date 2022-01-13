@@ -70,6 +70,27 @@ const AuthForm: FC<{ mode: "signin" | "signup" }> = ({ mode }) => {
               onChange={(e) => setPassword(e.target.value)}
               marginBottom={"15px"}
             />
+            {mode === "signup" ? (
+              <Box
+                onClick={() => {
+                  router.push("/signin");
+                }}
+                color={"gray.500"}
+                sx={{ cursor: "pointer", marginY: "10px" }}
+              >
+                already a member? signin
+              </Box>
+            ) : (
+              <Box
+                onClick={() => {
+                  router.push("/signup");
+                }}
+                color={"gray.500"}
+                sx={{ cursor: "pointer", marginY: "10px" }}
+              >
+                don't have an account? signup
+              </Box>
+            )}
             <Button
               type="submit"
               bg="green.500"

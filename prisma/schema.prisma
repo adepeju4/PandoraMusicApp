@@ -1,8 +1,9 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-generator client {
+generator prisma {
   provider = "prisma-client-js"
+  binaryTargets = ["native","darwin","debian-openssl-1.1.x"]
 }
 
 datasource db {
@@ -21,6 +22,7 @@ model User {
   email String @unique
   password String
   playlists Playlist[]
+  library Library[]
 }
 
 model Song{
@@ -36,7 +38,7 @@ model Song{
 }
 
 model Artist{
-     id Int @id @default(autoincrement())
+  id Int @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   songs Song[]
@@ -49,6 +51,18 @@ model Playlist{
   updatedAt DateTime @updatedAt
   name String
   song Song[]
+  user User? @relation(fields: [userId], references:[id])
+  userId Int?
+}
+
+model Library{
+  id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name String
+  artist String
+  duration Int
+  url String
   user User? @relation(fields: [userId], references:[id])
   userId Int?
 }

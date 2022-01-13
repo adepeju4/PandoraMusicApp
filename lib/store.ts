@@ -4,6 +4,7 @@ export const store = createStore({
   activeSongs: [],
   activeSong: null,
   random: [],
+  library: [],
   changeActiveSongs: action((state: any, payload) => {
     state.activeSongs = payload;
   }),
@@ -12,5 +13,8 @@ export const store = createStore({
   }),
   changerandom: action((state: any, payload) => {
     state.random = payload;
+  }),
+  setLibrary: action((state: any, payload) => {
+    state.library = payload;
   }),
 });

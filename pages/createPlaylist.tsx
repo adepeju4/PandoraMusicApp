@@ -6,16 +6,7 @@ import prisma from "../lib/prisma";
 import { useState, useRef, useEffect } from "react";
 import { useMe } from "../lib/hooks";
 import PlaylistTable from "../components/PlaylistTable";
-import {
-  Box,
-  Divider,
-  Input,
-  Flex,
-  Fade,
-  ScaleFade,
-  Slide,
-  SlideFade,
-} from "@chakra-ui/react";
+import { Box, Divider, Input, Flex } from "@chakra-ui/react";
 import { PlaylistNameInput } from "../components/playlistInput";
 import SearchSuggestions from "../components/SearchSuggestions";
 import fetcher from "../lib/fetcher";

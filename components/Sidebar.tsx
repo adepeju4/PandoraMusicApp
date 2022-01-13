@@ -7,7 +7,6 @@ import {
   ListItem,
   ListIcon,
   Divider,
-  Center,
   LinkBox,
   LinkOverlay,
 } from "@chakra-ui/layout";
@@ -19,6 +18,7 @@ import {
   MdFavorite,
 } from "react-icons/md";
 import { usePlaylist } from "../lib/hooks";
+import { Spinner } from "@chakra-ui/react";
 
 const navMenu = [
   {
@@ -52,7 +52,7 @@ const musicMenu = [
 ];
 
 function Sidebar() {
-  const { playlists } = usePlaylist();
+  const { playlists, isLoading, isError } = usePlaylist();
 
   return (
     <Box
@@ -109,7 +109,8 @@ function Sidebar() {
         <Divider color="gray.800" />
         <Box height="60%" overflowY="auto" paddingY="20px">
           <List spacing={2}>
-            {!playlists && <Box> Create new playlist</Box>}
+            {isError && []}
+            {isLoading && <Spinner />}
             {playlists &&
               playlists.map((playlist) => (
                 <ListItem paddingX="20px" key={playlist.id}>
