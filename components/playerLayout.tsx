@@ -33,7 +33,7 @@ function PlayerLayout({ children }) {
             h={6}
             color="white"
             onClick={showNav}
-            zIndex={"5"}
+            zIndex={"50000000000000000"}
           />
         </Box>
       )}

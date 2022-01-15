@@ -2,6 +2,7 @@ import "../styles/globals.css";
 import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 import { StoreProvider } from "easy-peasy";
 import PlayerLayout from "../components/playerLayout";
+import { useWindowDimensions } from "../lib/hooks";
 import { store } from "../lib/store";
 import "reset-css";
 
@@ -34,15 +35,17 @@ const theme = extendTheme({
 });
 
 function MyApp({ Component, pageProps }) {
+  const { width: screensize } =
+    typeof window !== "undefined" && useWindowDimensions();
   return (
     <ChakraProvider theme={theme}>
       <StoreProvider store={store}>
-        {Component.authPage ? (
-          <Component {...pageProps} />
-        ) : (
+        {!Component.authPage ? (
           <PlayerLayout>
             <Component {...pageProps} />
           </PlayerLayout>
+        ) : (
+          <Component {...pageProps} />
         )}
       </StoreProvider>
     </ChakraProvider>

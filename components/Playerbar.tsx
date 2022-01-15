@@ -44,16 +44,18 @@ const PlayerBar = () => {
             />
           ) : null}
         </Box>
-        <Box
-          width="30%"
-          color="white"
-          padding="20px"
-          display={matches ? "none" : "block"}
-        >
-          {activeSong ? (
-            <VolumeControl soundRef={soundRef} mute={mute} setmute={setmute} />
-          ) : null}
-        </Box>
+
+        {!matches && (
+          <Box width="30%" color="white" padding="20px">
+            {activeSong ? (
+              <VolumeControl
+                soundRef={soundRef}
+                mute={mute}
+                setmute={setmute}
+              />
+            ) : null}
+          </Box>
+        )}
       </Flex>
     </Box>
   );
