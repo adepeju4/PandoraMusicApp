@@ -2,6 +2,7 @@ import { Box, Text, Flex, keyframes, useMediaQuery } from "@chakra-ui/react";
 import { useStoreActions } from "easy-peasy";
 import { Image } from "@chakra-ui/react";
 import { useMe } from "../lib/hooks";
+import { validateToken } from "../lib/auth";
 import { artistsData } from "../prisma/songsData";
 import GradientLayout from "../components/gradientLayout";
 import ArtistsSlide from "../components/slideshows/ArtistsSlide";
@@ -230,7 +231,20 @@ const Home = ({ artists }) => {
   );
 };
 
-export const getServerSideProps = async () => {
+export const getServerSideProps = async ({ req }) => {
+  let user;
+
+  try {
+    user = validateToken(req.cookies.ACCESS_TOKEN);
+  } catch (error) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/signin",
+      },
+    };
+  }
+
   try {
     const artists = await prisma.artist.findMany({});
     const songs = await prisma.song.findMany({});
