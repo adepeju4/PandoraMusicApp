@@ -25,8 +25,6 @@ import {
   MdFavorite,
 } from "react-icons/md";
 import { usePlaylist } from "../lib/hooks";
-import { Spinner } from "@chakra-ui/react";
-import { useStoreActions, useStoreState } from "easy-peasy";
 
 const navMenu = [
   {
@@ -52,11 +50,11 @@ const musicMenu = [
     icon: MdPlaylistAdd,
     route: "/createPlaylist",
   },
-  {
-    name: "Favorites",
-    icon: MdFavorite,
-    route: "/favorites",
-  },
+  // {
+  //   name: "Favorites",
+  //   icon: MdFavorite,
+  //   route: "/favorites",
+  // },
 ];
 
 function MobileNav({ show, hide }) {
@@ -122,7 +120,7 @@ function MobileNav({ show, hide }) {
               <Box height="60%" overflowY="auto" paddingY="20px">
                 <List spacing={2}>
                   {isError && []}
-                  {isLoading && <Spinner />}
+                  {isLoading && "loading..."}
                   {playlists.map((playlist) => (
                     <ListItem paddingX="20px" key={playlist.id}>
                       <LinkBox>

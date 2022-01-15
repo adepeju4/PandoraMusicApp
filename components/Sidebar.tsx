@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import NextImage from "next/image";
 import NextLink from "next/link";
 import {
@@ -18,7 +18,6 @@ import {
   MdFavorite,
 } from "react-icons/md";
 import { usePlaylist } from "../lib/hooks";
-import { Spinner } from "@chakra-ui/react";
 
 const navMenu = [
   {
@@ -44,11 +43,11 @@ const musicMenu = [
     icon: MdPlaylistAdd,
     route: "/createPlaylist",
   },
-  {
-    name: "Favorites",
-    icon: MdFavorite,
-    route: "/favorites",
-  },
+  // {
+  //   name: "Favorites",
+  //   icon: MdFavorite,
+  //   route: "/favorites",
+  // },
 ];
 
 function Sidebar() {
@@ -110,7 +109,7 @@ function Sidebar() {
         <Box height="60%" overflowY="auto" paddingY="20px">
           <List spacing={2}>
             {isError && []}
-            {isLoading && <Spinner />}
+            {isLoading && "loading..."}
             {playlists.map((playlist) => (
               <ListItem paddingX="20px" key={playlist.id}>
                 <LinkBox>
