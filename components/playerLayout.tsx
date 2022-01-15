@@ -1,14 +1,17 @@
-import React, { useState } from "react";
-import { Box, useMediaQuery } from "@chakra-ui/react";
+import React, { useState, useEffect } from "react";
+import { Box } from "@chakra-ui/react";
 import { HamburgerIcon } from "@chakra-ui/icons";
-
+import { useWindowDimensions } from "../lib/hooks";
 import Sidebar from "./Sidebar";
 import MobileNav from "./MobileNav";
 import PlayerBar from "./Playerbar";
 
 function PlayerLayout({ children }) {
-  const [matches] = useMediaQuery("(max-width:880px)");
   const [show, setshow] = useState(false);
+  const [width, setwidth] = useState(0);
+
+  const { width: screensize } =
+    typeof window !== "undefined" && useWindowDimensions();
 
   const showNav = () => {
     setshow(true);
@@ -17,9 +20,13 @@ function PlayerLayout({ children }) {
     setshow(false);
   };
 
+  useEffect(() => {
+    setwidth(screensize);
+  }, [screensize]);
+
   return (
     <Box width="100vw" height="100vh">
-      {matches && (
+      {width <= 880 && (
         <Box position={"fixed"} top={"20px"} left={"20px"} width={"100px"}>
           <HamburgerIcon
             w={6}
@@ -30,22 +37,24 @@ function PlayerLayout({ children }) {
           />
         </Box>
       )}
-      <Box
-        position="absolute"
-        top="0"
-        width="250px"
-        left="0"
-        marginBottom="100px"
-        display={matches ? "none" : "block"}
-      >
-        <Sidebar />
-      </Box>
+      {width > 880 && (
+        <Box
+          position="absolute"
+          top="0"
+          width="250px"
+          left="0"
+          marginBottom="100px"
+        >
+          <Sidebar />
+        </Box>
+      )}
+
       {setshow && (
         <Box>
           <MobileNav show={show} hide={hideNav} />
         </Box>
       )}
-      <Box marginLeft={matches ? "0" : "250px"}>
+      <Box marginLeft={width <= 880 ? "0px" : "250px"}>
         <Box height="calc(100vh - 100px)">{children}</Box>
       </Box>
       <Box position="absolute" left="0" bottom="0">

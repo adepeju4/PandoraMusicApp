@@ -1,5 +1,5 @@
 import { Box, Flex, Text, useMediaQuery } from "@chakra-ui/react";
-
+import { useWindowDimensions } from "../lib/hooks";
 import { Image } from "@chakra-ui/react";
 
 function GradientLayout({
@@ -11,7 +11,11 @@ function GradientLayout({
   description,
   roundImage,
 }) {
-  const [matches] = useMediaQuery("(max-width:600px)");
+  // const [screensize <= 600] = useMediaQuery("(max-width:600px)");
+
+  const { width: screensize } =
+    typeof window !== "undefined" && useWindowDimensions();
+
   return (
     <Box
       height="100%"
@@ -21,8 +25,8 @@ function GradientLayout({
       <Flex
         bg={`${color}.600`}
         padding="40px"
-        align={matches ? "center" : "end"}
-        direction={matches ? "column" : "row"}
+        align={screensize <= 600 ? "center" : "end"}
+        direction={screensize <= 600 ? "column" : "row"}
       >
         <Box padding="20px">
           <Image
@@ -38,9 +42,9 @@ function GradientLayout({
           lineHeight="40px"
           color="white"
           direction={"column"}
-          justifyContent={matches && "center"}
-          alignItems={matches && "center"}
-          textAlign={matches ? "center" : "left"}
+          justifyContent={screensize <= 600 && "center"}
+          alignItems={screensize <= 600 && "center"}
+          textAlign={screensize <= 600 ? "center" : "left"}
         >
           <Text fontSize="x-small" fontWeight="bold" casing="uppercase">
             {subtitle}
