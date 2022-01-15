@@ -19,7 +19,7 @@ const getBGColor = (id) => {
   return colors[id - 1] || colors[Math.floor(Math.random() * colors.length)];
 };
 
-const bg = getBGColor("pink");
+const bg = getBGColor(Math.random() * 10);
 
 function library({ songs }) {
   return (
@@ -29,6 +29,7 @@ function library({ songs }) {
       title={`Your Library`}
       description={"Personalized Library"}
       roundImage
+      playlist={false}
       image="https://images.unsplash.com/photo-1597374459522-88a0516f6873?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTZ8fHNvbmdzfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=800&q=60"
     >
       <Box paddingX={"20px"} color={"white"}>

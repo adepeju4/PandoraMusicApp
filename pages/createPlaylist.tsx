@@ -1,10 +1,10 @@
+import { useState, useRef, useEffect } from "react";
 import * as Scroll from "react-scroll";
 import { usePlaylist } from "../lib/hooks";
 import GradientLayout from "../components/gradientLayout";
 import { useRouter } from "next/router";
 import { validateToken } from "../lib/auth";
 import prisma from "../lib/prisma";
-import { useState, useRef, useEffect } from "react";
 import { useMe } from "../lib/hooks";
 import PlaylistTable from "../components/PlaylistTable";
 import { Box, Divider, Input, Flex } from "@chakra-ui/react";
@@ -35,6 +35,8 @@ export default function CreatePlaylist({ songs: songsData }) {
   const [readOnly, setreadOnly] = useState(true);
 
   const [searchTerm, setsearchTerm] = useState("");
+
+  const [isLoading, setisLoading] = useState(false);
 
   const [title, settitle] = useState(
     user && `Playlist #${user.playlistsCount + 1}`
@@ -71,6 +73,7 @@ export default function CreatePlaylist({ songs: songsData }) {
   };
 
   const handleSubmit = async () => {
+    setisLoading(true);
     const playlistData = {
       name: title,
       user: {
@@ -83,7 +86,9 @@ export default function CreatePlaylist({ songs: songsData }) {
       },
     };
     const create = await fetcher("createPlaylist", playlistData);
+
     if (create) {
+      setisLoading(false);
       setonSavePlaylist(true);
 
       router.push(`/playlist/${create.id}`);
@@ -117,6 +122,7 @@ export default function CreatePlaylist({ songs: songsData }) {
           onEdit={onEdit}
         />
       }
+      playlist={true}
       description={"add songs that fits your mood"}
       roundImage={false}
       image="https://images.unsplash.com/photo-1518609878373-06d740f60d8b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTF8fHBsYXlsaXN0fGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=800&q=60"
@@ -127,6 +133,7 @@ export default function CreatePlaylist({ songs: songsData }) {
             <Box>Add songs to playlist</Box>
           ) : (
             <PlaylistTable
+              isLoading={isLoading}
               submit={handleSubmit}
               songs={songs}
               removeTrack={onRemoveSong}

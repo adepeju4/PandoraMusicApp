@@ -10,9 +10,8 @@ function GradientLayout({
   title,
   description,
   roundImage,
+  playlist,
 }) {
-  // const [screensize <= 600] = useMediaQuery("(max-width:600px)");
-
   const { width: screensize } =
     typeof window !== "undefined" && useWindowDimensions();
 
@@ -43,13 +42,18 @@ function GradientLayout({
           color="white"
           direction={"column"}
           justifyContent={screensize <= 600 && "center"}
-          alignItems={screensize <= 600 && "center"}
+          alignItems={
+            screensize <= 600 || playlist === true ? "flex-start" : "center"
+          }
           textAlign={screensize <= 600 ? "center" : "left"}
         >
           <Text fontSize="x-small" fontWeight="bold" casing="uppercase">
             {subtitle}
           </Text>
-          <Text fontSize="6xl" lineHeight={"55px"}>
+          <Text
+            fontSize={screensize <= 500 ? "2rem" : "6xl"}
+            lineHeight={"55px"}
+          >
             {title}
           </Text>
           <Text fontSize="x-small">{description}</Text>

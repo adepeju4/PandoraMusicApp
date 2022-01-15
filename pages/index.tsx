@@ -49,6 +49,7 @@ const Home = ({ artists }) => {
       description={
         user ? `${user?.playlistsCount} public playlists` : "loading playlists"
       }
+      playlist={false}
       image="https://dl.dropboxusercontent.com/s/bgiv0ssz3xpotz9/peep.png?dl=0"
     >
       <Box color="white" paddingX="40px">

@@ -8,6 +8,7 @@ import {
   Th,
   IconButton,
   useMediaQuery,
+  Spinner,
 } from "@chakra-ui/react";
 import {
   AiOutlineClockCircle,
@@ -16,19 +17,25 @@ import {
 } from "react-icons/ai";
 import { formatTime, formatDate } from "../lib/formatters";
 
-const PlaylistTable = ({ submit, removeTrack, songs }) => {
+const PlaylistTable = ({ isLoading, submit, removeTrack, songs }) => {
   const [matches] = useMediaQuery("(max-width:530px)");
+
   return (
     <Box bg="transparent" color="white">
       <Box padding={matches ? "5px" : "10px"} marginBottom="20px">
-        <Box marginBottom="30px" display={"flex"} alignItems="center">
+        <Box
+          marginBottom="30px"
+          display={"flex"}
+          alignItems="center"
+          onClick={submit}
+          cursor={"pointer"}
+        >
           <IconButton
-            icon={<AiOutlinePlus fontSize="30px" />}
+            icon={isLoading ? <Spinner /> : <AiOutlinePlus fontSize="30px" />}
             aria-label="create-playlist"
             colorScheme="green"
             size="lg"
             isRound
-            onClick={submit}
           />
           <Box marginLeft={"20px"}>Create Playlist</Box>
         </Box>

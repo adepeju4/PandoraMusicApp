@@ -26,7 +26,7 @@ const getBGColor = (id) => {
   return colors[id - 1] || colors[Math.floor(Math.random() * colors.length)];
 };
 
-const bg = getBGColor("pink");
+const bg = getBGColor(Math.random() * 10);
 
 export default function Search({ librarySongs }) {
   const { user } = useMe();
@@ -120,6 +120,7 @@ export default function Search({ librarySongs }) {
       color={bg}
       subtitle="search"
       title={`Search Tracks`}
+      playlist={false}
       description={
         <Searchbar searchTerm={searchTerm} onSaveSearchTerm={handleSearch} />
       }
