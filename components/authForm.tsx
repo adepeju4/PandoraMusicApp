@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { FC, useState } from "react";
 import NextImage from "next/image";
 import { auth } from "../lib/mutations";
+import { useWindowDimensions } from "../lib/hooks";
 
 const AuthForm: FC<{ mode: "signin" | "signup" }> = ({ mode }) => {
   const [firstName, setfirstName] = useState("");
@@ -26,6 +27,9 @@ const AuthForm: FC<{ mode: "signin" | "signup" }> = ({ mode }) => {
     else router.push("/");
   };
 
+  const { width: screensize } =
+    typeof window !== "undefined" && useWindowDimensions();
+
   return (
     <Box height="100vh" width="100vw" bg="black" color="white">
       <Flex
@@ -37,7 +41,13 @@ const AuthForm: FC<{ mode: "signin" | "signup" }> = ({ mode }) => {
         <NextImage src="/logo.svg" height={60} width={120} />
       </Flex>
       <Flex justify="center" align="center" height="calc(100vh - 100px)">
-        <Box padding="50px" bg="gray.900" borderRadius="6px" maxWidth={"50%"}>
+        <Box
+          paddingX={screensize >= 650 ? "50px" : "20px"}
+          paddingY={screensize >= 650 ? "50px" : "30px"}
+          bg="gray.900"
+          borderRadius="6px"
+          maxWidth={screensize >= 600 ? "50%" : "90%"}
+        >
           <form onSubmit={handleSubmit}>
             {error && <Text color="red.600"> {error}</Text>}
 
