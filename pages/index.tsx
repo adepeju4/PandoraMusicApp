@@ -1,13 +1,16 @@
-import { Box, Text, Flex, keyframes } from "@chakra-ui/react";
-
+import { Box, Text, Flex, keyframes, useMediaQuery } from "@chakra-ui/react";
+import { useStoreActions } from "easy-peasy";
 import { Image } from "@chakra-ui/react";
 import { useMe } from "../lib/hooks";
+import { artistsData } from "../prisma/songsData";
 import GradientLayout from "../components/gradientLayout";
+import ArtistsSlide from "../components/slideshows/ArtistsSlide";
 import prisma from "../lib/prisma";
 
-const Home = ({ artists, songs }) => {
+const Home = ({ artists }) => {
   const { user } = useMe();
 
+  const [matches] = useMediaQuery("(max-width:600px)");
   const scroll = keyframes`
   0% {
     transform: translateX(0);
@@ -17,38 +20,68 @@ const Home = ({ artists, songs }) => {
   }
 `;
 
+  const songs = artistsData.map((item, i) => {
+    return {
+      id: i + 1,
+      name: item.songs[0].name,
+      duration: item.songs[0].duration,
+      url: item.songs[0].url,
+      artist: {
+        name: item.name,
+      },
+    };
+  });
+
+  const playSongs = useStoreActions((store: any) => store.changeActiveSongs);
+  const setActiveSong = useStoreActions((store: any) => store.changeActiveSong);
+  const handlePlay = (activeSong?) => {
+    setActiveSong(activeSong || songs[0]);
+    playSongs([activeSong]);
+  };
+
   return (
     <GradientLayout
       roundImage
       color="gray"
       subtitle="profile"
-      title={`${user?.firstName} ${user?.lastName}`}
-      description={`${user?.playlistsCount} public playlists`}
+      title={user ? `${user?.firstName} ${user?.lastName}` : "loading"}
+      description={
+        user ? `${user?.playlistsCount} public playlists` : "loading playlists"
+      }
       image="https://dl.dropboxusercontent.com/s/bgiv0ssz3xpotz9/peep.png?dl=0"
     >
       <Box color="white" paddingX="40px">
         <Box marginBottom="40px">
           <Text fontSize="2xl" fontWeight="bold">
-            Top artist this month
+            Top artists this month
           </Text>
           <Text fontSize="md">only visible to you</Text>
         </Box>
         <Flex>
-          {artists.map((artist) => (
-            <Box paddingX="10px" width="20%" key={`artist${artist.id}`}>
-              <Box bg="gray.900" borderRadius="4px" padding="15px" width="100%">
-                <Image
-                  src={`https://picsum.photos/400?random=${artist.id}`}
-                  borderRadius="100%"
-                  objectFit={"cover"}
-                />
-                <Box marginTop="20px">
-                  <Text fontSize="large">{artist.name}</Text>
-                  <Text fontSize="x-small">Artist</Text>
+          {matches ? (
+            <ArtistsSlide artists={artists} />
+          ) : (
+            artists.map((artist) => (
+              <Box paddingX="10px" width="20%" key={`artist${artist.id}`}>
+                <Box
+                  bg="gray.900"
+                  borderRadius="4px"
+                  padding="15px"
+                  width="100%"
+                >
+                  <Image
+                    src={`https://picsum.photos/400?random=${artist.id}`}
+                    borderRadius="100%"
+                    objectFit={"cover"}
+                  />
+                  <Box marginTop="20px">
+                    <Text fontSize="large">{artist.name}</Text>
+                    <Text fontSize="x-small">Artist</Text>
+                  </Box>
                 </Box>
               </Box>
-            </Box>
-          ))}
+            ))
+          )}
         </Flex>
       </Box>
       <Box paddingY={"20px"}>
@@ -104,6 +137,9 @@ const Home = ({ artists, songs }) => {
                 alignItems={"center"}
                 padding={"15px"}
                 sx={{ perspective: "100px" }}
+                onClick={() => {
+                  handlePlay(song);
+                }}
               >
                 <>
                   <Box
@@ -158,7 +194,13 @@ const Home = ({ artists, songs }) => {
               <Text color={"gray.500"}> No top songs yet</Text>
             ))}
           {songs.slice(3).map((song: any, i: any) => (
-            <Box key={`songs${song.id}`}>
+            <Box
+              key={`songs${song.id}`}
+              onClick={() => {
+                handlePlay(song);
+              }}
+              cursor={"pointer"}
+            >
               <Flex
                 direction={"row"}
                 marginBottom={"10px"}
@@ -189,11 +231,15 @@ const Home = ({ artists, songs }) => {
 };
 
 export const getServerSideProps = async () => {
-  const artists = await prisma.artist.findMany({});
-  const songs = await prisma.song.findMany({});
-  return {
-    props: { artists, songs },
-  };
+  try {
+    const artists = await prisma.artist.findMany({});
+    const songs = await prisma.song.findMany({});
+    return {
+      props: { artists, songs },
+    };
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export default Home;

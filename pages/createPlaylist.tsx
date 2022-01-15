@@ -1,4 +1,5 @@
 import * as Scroll from "react-scroll";
+import { usePlaylist } from "../lib/hooks";
 import GradientLayout from "../components/gradientLayout";
 import { useRouter } from "next/router";
 import { validateToken } from "../lib/auth";
@@ -9,6 +10,7 @@ import PlaylistTable from "../components/PlaylistTable";
 import { Box, Divider, Input, Flex } from "@chakra-ui/react";
 import { PlaylistNameInput } from "../components/playlistInput";
 import SearchSuggestions from "../components/SearchSuggestions";
+import { useStoreActions } from "easy-peasy";
 import fetcher from "../lib/fetcher";
 
 const getBGColor = (id) => {
@@ -38,6 +40,7 @@ export default function CreatePlaylist({ songs: songsData }) {
     user && `Playlist #${user.playlistsCount + 1}`
   );
 
+  const [onSavePlaylist, setonSavePlaylist] = useState(false);
   const [displaySuggestions, setdisplaySuggestions] = useState(false);
 
   const [songs, setsongs] = useState([]);
@@ -47,6 +50,10 @@ export default function CreatePlaylist({ songs: songsData }) {
   const suggestionsRef = useRef(null);
 
   const scroll = Scroll.animateScroll;
+
+  const { playlists } = usePlaylist();
+
+  const setPlaylists = useStoreActions((state: any) => state.setPlaylists);
 
   const onEdit = () => {
     setreadOnly(false);
@@ -77,9 +84,17 @@ export default function CreatePlaylist({ songs: songsData }) {
     };
     const create = await fetcher("createPlaylist", playlistData);
     if (create) {
+      setonSavePlaylist(true);
+
       router.push(`/playlist/${create.id}`);
     }
   };
+
+  useEffect(() => {
+    if (onSavePlaylist) {
+      setPlaylists(playlists ? playlists : []);
+    }
+  }, [onSavePlaylist]);
 
   useEffect(() => {
     if (displaySuggestions) {

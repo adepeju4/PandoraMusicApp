@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import NextImage from "next/image";
 import NextLink from "next/link";
 import {
@@ -111,22 +111,21 @@ function Sidebar() {
           <List spacing={2}>
             {isError && []}
             {isLoading && <Spinner />}
-            {playlists &&
-              playlists.map((playlist) => (
-                <ListItem paddingX="20px" key={playlist.id}>
-                  <LinkBox>
-                    <NextLink
-                      href={{
-                        pathname: "/playlist/[id]",
-                        query: { id: playlist.id },
-                      }}
-                      passHref
-                    >
-                      <LinkOverlay>{playlist.name}</LinkOverlay>
-                    </NextLink>
-                  </LinkBox>
-                </ListItem>
-              ))}
+            {playlists.map((playlist) => (
+              <ListItem paddingX="20px" key={playlist.id}>
+                <LinkBox>
+                  <NextLink
+                    href={{
+                      pathname: "/playlist/[id]",
+                      query: { id: playlist.id },
+                    }}
+                    passHref
+                  >
+                    <LinkOverlay>{playlist.name}</LinkOverlay>
+                  </NextLink>
+                </LinkBox>
+              </ListItem>
+            ))}
           </List>
         </Box>
       </Box>

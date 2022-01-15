@@ -1,7 +1,7 @@
-import { Box, Flex, Spinner } from "@chakra-ui/react";
+import { Box, Flex, Spinner, useMediaQuery } from "@chakra-ui/react";
 import GradientLayout from "../components/gradientLayout";
 import Searchbar from "../components/Searchbar";
-import { useStoreActions } from "easy-peasy";
+import { useStoreActions, useStoreState } from "easy-peasy";
 import { AiOutlinePlus, AiOutlineCheck } from "react-icons/ai";
 import { BsPlayFill } from "react-icons/bs";
 import { artistsData } from "../prisma/songsData";
@@ -99,9 +99,21 @@ export default function Search({ librarySongs }) {
 
   const handlePlay = (song, index) => {
     setActiveSong(song);
-    playSongs([song, ...filterSongs]);
+    playSongs([song]);
     setplaying({ [index]: "green" });
   };
+
+  let basis;
+  const [md] = useMediaQuery("(max-width:998px)");
+  const [sm] = useMediaQuery("(max-width:400px)");
+
+  if (sm) {
+    basis = "100%";
+  } else if (md) {
+    basis = "49%";
+  } else {
+    basis = "32%";
+  }
 
   return (
     <GradientLayout
@@ -114,12 +126,12 @@ export default function Search({ librarySongs }) {
       roundImage
       image="https://media.istockphoto.com/photos/3d-microphone-icon-isolated-on-white-background-3d-rendering-icon-picture-id1317330756?b=1&k=20&m=1317330756&s=170667a&w=0&h=d85OVzcjWJe9ITBMhwSo6O-BYS4Ewe7rN2ltPrXI4Og="
     >
-      <Box paddingX={"20px"}>
+      <Box paddingX={sm ? "30px" : "20px"}>
         <Flex justifyContent={"space-evenly"} flexFlow={"row wrap"} gap={"2%"}>
           {filterSongs.map((song, i) => (
             <Box
-              flexBasis={"23%"}
-              height={"200px"}
+              flexBasis={basis}
+              height={"300px"}
               position={"relative"}
               background={`url(https://picsum.photos/400?random=${song.id})`}
               backgroundSize={"cover"}

@@ -9,6 +9,7 @@ import {
   Center,
   Flex,
   Text,
+  useMediaQuery,
 } from "@chakra-ui/react";
 import ReactHowler from "react-howler";
 import { useEffect, useRef, useState } from "react";
@@ -26,10 +27,12 @@ import { randomize } from "../lib/randomize";
 import shuffleTracker from "../lib/shuffleTracker";
 
 const Player = ({ songs, activeSong, random, soundRef, mute }) => {
+  const [matches] = useMediaQuery("(max-width:690px)");
+
   const [playing, setPlaying] = useState(true);
 
   const [index, setIndex] = useState(
-    songs.findIndex((s) => s.id === activeSong.id)
+    songs.findIndex((s: any) => s.id === activeSong.id)
   );
   const [seek, setSeek] = useState(0.0);
   const [isSeeking, setIsSeeking] = useState(false);
@@ -155,6 +158,7 @@ const Player = ({ songs, activeSong, random, soundRef, mute }) => {
             fontSize="24px"
             color={shuffle ? "white" : "gray.600"}
             onClick={onShuffle}
+            sx={{ display: matches ? "none" : "block" }}
             icon={<MdShuffle />}
           />
           <IconButton
@@ -202,12 +206,13 @@ const Player = ({ songs, activeSong, random, soundRef, mute }) => {
             fontSize="24px"
             color={repeat ? "white" : "gray.600"}
             onClick={onRepeat}
+            sx={{ display: matches ? "none" : "block" }}
             icon={<MdOutlineRepeat />}
           />
         </ButtonGroup>
       </Center>
 
-      <Box color="gray.600">
+      <Box color="gray.600" display={matches ? "none" : "block"}>
         <Flex justify="center" align="center">
           <Box width="10%">
             <Text fontSize="xs">{formatTime(seek)}</Text>

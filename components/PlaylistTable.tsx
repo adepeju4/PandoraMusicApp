@@ -1,5 +1,14 @@
 import { Box } from "@chakra-ui/layout";
-import { Table, Thead, Td, Tr, Tbody, Th, IconButton } from "@chakra-ui/react";
+import {
+  Table,
+  Thead,
+  Td,
+  Tr,
+  Tbody,
+  Th,
+  IconButton,
+  useMediaQuery,
+} from "@chakra-ui/react";
 import {
   AiOutlineClockCircle,
   AiOutlinePlus,
@@ -8,9 +17,10 @@ import {
 import { formatTime, formatDate } from "../lib/formatters";
 
 const PlaylistTable = ({ submit, removeTrack, songs }) => {
+  const [matches] = useMediaQuery("(max-width:530px)");
   return (
     <Box bg="transparent" color="white">
-      <Box padding="10px" marginBottom="20px">
+      <Box padding={matches ? "5px" : "10px"} marginBottom="20px">
         <Box marginBottom="30px" display={"flex"} alignItems="center">
           <IconButton
             icon={<AiOutlinePlus fontSize="30px" />}
@@ -25,9 +35,9 @@ const PlaylistTable = ({ submit, removeTrack, songs }) => {
         <Table variant="unstyled">
           <Thead borderBottom="1px solid" borderColor="rgba(255,255,255,0.2)">
             <Tr>
-              <Th>#</Th>
+              <Th display={matches ? "none" : "block"}>#</Th>
               <Th>Title</Th>
-              <Th>Date Added</Th>
+              <Th display={matches ? "none" : "block"}>Date Added</Th>
               <Th>
                 <AiOutlineClockCircle />
               </Th>
@@ -46,9 +56,11 @@ const PlaylistTable = ({ submit, removeTrack, songs }) => {
                 key={song.id}
                 cursor="pointer"
               >
-                <Td>{i + 1}</Td>
+                <Td display={matches ? "none" : "block"}>{i + 1}</Td>
                 <Td>{song.name}</Td>
-                <Td>{formatDate(song.createdAt)}</Td>
+                <Td display={matches ? "none" : "block"}>
+                  {formatDate(song.createdAt)}
+                </Td>
                 <Td>{formatTime(song.duration)}</Td>
                 <Td>
                   {" "}

@@ -1,5 +1,14 @@
 import { Box } from "@chakra-ui/layout";
-import { Table, Thead, Td, Tr, Tbody, Th, IconButton } from "@chakra-ui/react";
+import {
+  Table,
+  Thead,
+  Td,
+  Tr,
+  Tbody,
+  Th,
+  IconButton,
+  useMediaQuery,
+} from "@chakra-ui/react";
 import { BsFillPlayFill } from "react-icons/bs";
 import { AiOutlineClockCircle } from "react-icons/ai";
 import { useStoreActions } from "easy-peasy";
@@ -12,7 +21,7 @@ const SongTable = ({ songs }) => {
     setActiveSong(activeSong || songs[0]);
     playSongs(songs);
   };
-
+  const [matches] = useMediaQuery("(max-width:530px)");
   return (
     <Box bg="transparent" color="white">
       <Box padding="10px" marginBottom="20px">
@@ -31,7 +40,7 @@ const SongTable = ({ songs }) => {
             <Tr>
               <Th>#</Th>
               <Th>Title</Th>
-              <Th>Date Added</Th>
+              <Th display={matches ? "none" : "block"}>Date Added</Th>
               <Th>
                 <AiOutlineClockCircle />
               </Th>
@@ -52,7 +61,9 @@ const SongTable = ({ songs }) => {
               >
                 <Td>{i + 1}</Td>
                 <Td>{song.name}</Td>
-                <Td>{formatDate(song.createdAt)}</Td>
+                <Td display={matches ? "none" : "block"}>
+                  {formatDate(song.createdAt)}
+                </Td>
                 <Td>{formatTime(song.duration)}</Td>
               </Tr>
             ))}
