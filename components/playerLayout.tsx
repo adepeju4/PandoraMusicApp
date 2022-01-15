@@ -57,7 +57,7 @@ function PlayerLayout({ children }) {
       <Box marginLeft={width <= 880 ? "0px" : "250px"}>
         <Box height="calc(100vh - 100px)">{children}</Box>
       </Box>
-      <Box position="absolute" left="0" bottom="0">
+      <Box position="fixed" left="0" bottom="0">
         <PlayerBar />
       </Box>
     </Box>
