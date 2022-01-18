@@ -24,7 +24,7 @@ function GradientLayout({
       <Flex
         bg={`${color}.600`}
         padding="40px"
-        align={screensize <= 600 ? "center" : "end"}
+        align-items={screensize <= 600 ? "center" : "flex-end"}
         direction={screensize <= 600 ? "column" : "row"}
       >
         <Box padding="20px">
@@ -43,9 +43,8 @@ function GradientLayout({
           direction={"column"}
           justifyContent={screensize <= 600 && "center"}
           alignItems={
-            screensize <= 600 || playlist === true ? "flex-start" : "center"
+            screensize <= 600 && playlist === true ? "center" : "flex-start"
           }
-          textAlign={screensize <= 600 ? "center" : "left"}
         >
           <Text fontSize="x-small" fontWeight="bold" casing="uppercase">
             {subtitle}
